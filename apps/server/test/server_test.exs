@@ -8,7 +8,7 @@ defmodule ServerTest do
     %{}
   end
 
-  test "it starts the an agent" do
+  test "it starts with no tasks" do
     assert {:ok, tasks: []} = Server.all()
   end
 
