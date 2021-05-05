@@ -1,15 +1,10 @@
 defmodule ServerTest do
-  use ExUnit.Case
-  alias Server.Boundary.TaskManager
+  use ExUnit.Case, async: false
   alias Server.Core.Task
+  alias Server.Boundary.TaskManager
 
   setup do
-    start_supervised!(TaskManager)
-    %{}
-  end
-
-  test "it starts with no tasks" do
-    assert {:ok, tasks: []} = Server.all()
+    %{pid: start_supervised!(TaskManager)}
   end
 
   test "you can add a task" do

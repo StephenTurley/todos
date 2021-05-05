@@ -1,5 +1,5 @@
 defmodule Core.TaskTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   alias Server.Core.Task
 
   describe "building a Task" do

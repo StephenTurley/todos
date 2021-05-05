@@ -10,6 +10,7 @@ defmodule Server.Application do
     children = [{Server.Boundary.TaskManager, name: Server.Boundary.TaskManager}]
 
     opts = [strategy: :one_for_one, name: Server.Supervisor]
+
     Supervisor.start_link(children, opts)
   end
 end
