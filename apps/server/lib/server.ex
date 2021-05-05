@@ -1,18 +1,17 @@
 defmodule Server do
-  @moduledoc """
-  Documentation for `Server`.
-  """
+  alias Server.Boundary.TaskManager
+  alias Server.Core.Task
 
-  @doc """
-  Hello world.
+  def all() do
+    {:ok, tasks: TaskManager.all(TaskManager)}
+  end
 
-  ## Examples
+  def add_task() do
+    {:error, "you must include a title"}
+  end
 
-      iex> Server.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def add_task(title: title) do
+    TaskManager.add(TaskManager, Task.new(title: title))
+    :ok
   end
 end
