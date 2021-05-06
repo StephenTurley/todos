@@ -3,7 +3,7 @@ defmodule Server do
   alias Server.Core.Task
 
   def all() do
-    {:ok, tasks: TaskManager.all()}
+    {:ok, TaskManager.all()}
   end
 
   def add_task() do

@@ -7,7 +7,10 @@ defmodule Server.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [{Server.Boundary.TaskManager, name: Server.Boundary.TaskManager}]
+    children = [
+      {Server.Boundary.TaskManager, name: Server.Boundary.TaskManager},
+      {Plug.Cowboy, scheme: :http, plug: Router, options: [port: 4001]}
+    ]
 
     opts = [strategy: :one_for_one, name: Server.Supervisor]
 

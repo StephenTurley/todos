@@ -24,7 +24,10 @@ defmodule Server.MixProject do
   end
 
   defp deps do
-    [{:plug_cowboy, "~> 2.0"}]
+    [
+      {:plug_cowboy, "~> 2.0"},
+      {:jason, "~> 1.2"}
+    ]
   end
 
   defp aliases do

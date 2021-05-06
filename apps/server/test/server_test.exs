@@ -10,7 +10,7 @@ defmodule ServerTest do
   test "you can add a task" do
     assert :ok = Server.add_task(title: "Foo")
 
-    assert {:ok, tasks: [%Task{title: "Foo"}]} = Server.all()
+    assert {:ok, [%Task{title: "Foo"}]} = Server.all()
   end
 
   describe "validations" do
