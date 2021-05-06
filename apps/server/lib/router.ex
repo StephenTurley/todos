@@ -8,20 +8,30 @@ defmodule Router do
 
   post "/task" do
     conn
-    |> create_task
+    |> add_task
     |> send_all
   end
 
-  defp send_all(conn) do
-    with {:ok, tasks} = Server.all() do
+  defp send_all({:error, conn}) do
+    send_resp(conn, 400, "bad request")
+  end
+
+  defp send_all({:ok, conn}) do
+    with {:ok, tasks} <- Server.all() do
       send_resp(conn, 200, Jason.encode!(tasks))
     end
   end
 
-  defp create_task(conn) do
-    with title = Map.get(conn.body_params, "title"),
-         :ok = Server.add_task(title: title) do
-      conn
+  defp add_task(conn) do
+    with task <- create_task(conn.body_params),
+         :ok <- Server.add_task(task) do
+      {:ok, conn}
+    else
+      _errors -> {:error, conn}
     end
+  end
+
+  defp create_task(params) do
+    %{title: params["title"]}
   end
 end

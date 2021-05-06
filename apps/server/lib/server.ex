@@ -1,17 +1,19 @@
 defmodule Server do
   alias Server.Boundary.TaskManager
+  alias Server.Boundary.TaskValidator
   alias Server.Core.Task
 
   def all() do
     {:ok, TaskManager.all()}
   end
 
-  def add_task() do
-    {:error, "you must include a title"}
-  end
-
-  def add_task(title: title) do
-    TaskManager.add(Task.new(title: title))
-    :ok
+  def add_task(fields) do
+    with :ok <- TaskValidator.errors(fields),
+         task <- Task.new(fields),
+         :ok <- TaskManager.add(task) do
+      :ok
+    else
+      errors -> errors
+    end
   end
 end
