@@ -9,16 +9,22 @@ defmodule Router do
   post "/task" do
     conn
     |> add_task
-    |> send_all
+    |> send_all(201)
   end
 
-  defp send_all({:error, conn}) do
+  get "/task" do
+    send_all({:ok, conn})
+  end
+
+  defp send_all(res, status \\ 200)
+
+  defp send_all({:error, conn}, _status) do
     send_resp(conn, 400, "bad request")
   end
 
-  defp send_all({:ok, conn}) do
+  defp send_all({:ok, conn}, status) do
     with {:ok, tasks} <- Server.all() do
-      send_resp(conn, 200, Jason.encode!(tasks))
+      send_resp(conn, status, Jason.encode!(tasks))
     end
   end
 

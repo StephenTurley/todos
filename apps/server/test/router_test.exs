@@ -10,6 +10,23 @@ defmodule RouterTest do
     %{pid: start_supervised!(TaskManager)}
   end
 
+  describe "getting tasks" do
+    test "returns all the tasks", %{pid: pid} do
+      tasks = [%{title: "foo"}, %{title: "bar"}]
+
+      Enum.each(tasks, fn t -> TaskManager.add(pid, t) end)
+
+      conn =
+        conn(:get, "/task")
+        |> Plug.Conn.put_req_header("accept", "application/json")
+        |> Router.call(@opts)
+
+      assert conn.state == :sent
+      assert conn.status == 200
+      assert conn.resp_body == Jason.encode!(Enum.reverse(tasks))
+    end
+  end
+
   describe "adding a task" do
     test "updates the list" do
       task = Jason.encode!(%{"title" => "FlerpnDerpn"})
@@ -21,7 +38,7 @@ defmodule RouterTest do
         |> Router.call(@opts)
 
       assert conn.state == :sent
-      assert conn.status == 200
+      assert conn.status == 201
       assert conn.resp_body == Jason.encode!([%{"title" => "FlerpnDerpn"}])
     end
 
