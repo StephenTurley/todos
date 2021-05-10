@@ -1,6 +1,6 @@
 defmodule Server do
   alias Server.Boundary.TaskManager
-  alias Server.Boundary.TaskValidator
+  alias Core.Boundary.TaskValidator
   alias Core.Task
 
   def all() do

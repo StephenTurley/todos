@@ -1,4 +1,4 @@
-defmodule Server.Boundary.TaskValidator do
+defmodule Core.Boundary.TaskValidator do
   def errors(fields) do
     []
     |> required(fields, :title, &valid_title/2)
