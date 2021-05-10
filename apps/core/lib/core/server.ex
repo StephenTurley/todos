@@ -11,7 +11,7 @@ defmodule Core.Server do
     with :ok <- TaskValidator.errors(fields),
          task <- Task.new(fields),
          :ok <- TaskManager.add(task) do
-      :ok
+      {:ok, task}
     else
       errors -> errors
     end

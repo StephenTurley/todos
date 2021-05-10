@@ -31,7 +31,7 @@ defmodule Router do
 
   defp add_task(conn) do
     with task <- create_task(conn.body_params),
-         :ok <- Server.add_task(task) do
+         {:ok, _} <- Server.add_task(task) do
       {:ok, conn}
     else
       _errors -> {:error, conn}

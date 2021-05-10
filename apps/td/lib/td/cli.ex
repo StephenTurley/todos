@@ -2,7 +2,7 @@ defmodule TD.CLI do
   alias Core.Server
 
   def main(args) do
-    with :ok <- process(args) do
+    with {:ok, _} <- process(args) do
       System.stop(0)
     else
       _error -> System.stop(1)
@@ -18,9 +18,9 @@ defmodule TD.CLI do
   end
 
   defp process([]) do
-    with {:ok, tasks} <- Server.all() do
+    with {:ok, tasks} = response <- Server.all() do
       Enum.map(tasks, fn t -> IO.puts(t.title) end)
-      :ok
+      response
     else
       _ -> :error
     end
