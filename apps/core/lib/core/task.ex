@@ -1,4 +1,4 @@
-defmodule Server.Core.Task do
+defmodule Core.Task do
   # TODO should this be a response type... needs tested either way
   @derive {Jason.Encoder, only: [:title]}
   defstruct [:title]

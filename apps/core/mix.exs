@@ -1,9 +1,9 @@
-defmodule Server.MixProject do
+defmodule Core.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :server,
+      app: :core,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -11,29 +11,22 @@ defmodule Server.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
-      aliases: aliases()
+      deps: deps()
     ]
   end
 
+  # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger],
-      mod: {Server.Application, []}
+      extra_applications: [:logger]
     ]
   end
 
+  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_cowboy, "~> 2.0"},
-      {:core, in_umbrella: true},
+      # TODO remove this
       {:jason, "~> 1.2"}
-    ]
-  end
-
-  defp aliases do
-    [
-      test: "test --no-start"
     ]
   end
 end

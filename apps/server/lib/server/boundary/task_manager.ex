@@ -1,6 +1,6 @@
 defmodule Server.Boundary.TaskManager do
   use Agent
-  alias Server.Core.TaskList
+  alias Core.TaskList
 
   def start_link(_) do
     Agent.start_link(&TaskList.new/0, name: __MODULE__)

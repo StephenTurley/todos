@@ -2,7 +2,7 @@ defmodule Boundary.TaskManagerTest do
   use ExUnit.Case, async: true
 
   alias Server.Boundary.TaskManager
-  alias Server.Core.Task
+  alias Core.Task
 
   setup do
     task_manager = start_supervised!(TaskManager)

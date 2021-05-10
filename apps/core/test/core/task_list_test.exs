@@ -1,8 +1,8 @@
 defmodule Server.Core.TaskListTest do
   use ExUnit.Case, async: true
 
-  alias Server.Core.Task
-  alias Server.Core.TaskList
+  alias Core.Task
+  alias Core.TaskList
 
   test "you can add tasks" do
     result =

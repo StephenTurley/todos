@@ -1,6 +1,6 @@
 defmodule ServerTest do
   use ExUnit.Case, async: false
-  alias Server.Core.Task
+  alias Core.Task
   alias Server.Boundary.TaskManager
 
   setup do

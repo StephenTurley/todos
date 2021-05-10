@@ -1,4 +1,4 @@
-defmodule Server.Core.TaskList do
+defmodule Core.TaskList do
   def new() do
     []
   end

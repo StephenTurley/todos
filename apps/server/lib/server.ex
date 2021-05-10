@@ -1,7 +1,7 @@
 defmodule Server do
   alias Server.Boundary.TaskManager
   alias Server.Boundary.TaskValidator
-  alias Server.Core.Task
+  alias Core.Task
 
   def all() do
     {:ok, TaskManager.all()}
