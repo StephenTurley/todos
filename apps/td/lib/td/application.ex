@@ -8,12 +8,9 @@ defmodule Td.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: Td.Worker.start_link(arg)
-      # {Td.Worker, arg}
+      {Boundary.TaskManager, name: Boundary.TaskManager}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Td.Supervisor]
     Supervisor.start_link(children, opts)
   end
