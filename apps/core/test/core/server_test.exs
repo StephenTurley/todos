@@ -1,7 +1,8 @@
-defmodule ServerTest do
+defmodule Core.ServerTest do
   use ExUnit.Case, async: false
+  alias Core.Server
   alias Core.Task
-  alias Server.Boundary.TaskManager
+  alias Boundary.TaskManager
 
   setup do
     %{pid: start_supervised!(TaskManager)}

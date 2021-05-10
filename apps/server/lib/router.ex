@@ -1,6 +1,7 @@
 defmodule Router do
   use Plug.Router
   import Plug.Conn
+  alias Core.Server
 
   plug(:match)
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)

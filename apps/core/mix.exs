@@ -11,7 +11,8 @@ defmodule Core.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -27,6 +28,12 @@ defmodule Core.MixProject do
     [
       # TODO remove this
       {:jason, "~> 1.2"}
+    ]
+  end
+
+  defp aliases do
+    [
+      test: "test --no-start"
     ]
   end
 end

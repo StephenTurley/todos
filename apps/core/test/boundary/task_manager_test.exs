@@ -1,7 +1,7 @@
 defmodule Boundary.TaskManagerTest do
   use ExUnit.Case, async: true
 
-  alias Server.Boundary.TaskManager
+  alias Boundary.TaskManager
   alias Core.Task
 
   setup do

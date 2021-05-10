@@ -1,4 +1,4 @@
-defmodule Server.Boundary.TaskManager do
+defmodule Boundary.TaskManager do
   use Agent
   alias Core.TaskList
 
