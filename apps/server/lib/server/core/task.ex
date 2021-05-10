@@ -1,5 +1,6 @@
 defmodule Server.Core.Task do
-  @derive {Jason.Encoder, only: [:title]} # TODO should this be a response type... needs tested either way
+  # TODO should this be a response type... needs tested either way
+  @derive {Jason.Encoder, only: [:title]}
   defstruct [:title]
 
   def new(args) do

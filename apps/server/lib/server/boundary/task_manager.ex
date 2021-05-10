@@ -1,8 +1,9 @@
 defmodule Server.Boundary.TaskManager do
   use Agent
+  alias Server.Core.TaskList
 
   def start_link(_) do
-    Agent.start_link(fn -> [] end, name: __MODULE__)
+    Agent.start_link(&TaskList.new/0, name: __MODULE__)
   end
 
   def all(manager \\ __MODULE__) do
@@ -10,6 +11,6 @@ defmodule Server.Boundary.TaskManager do
   end
 
   def add(manager \\ __MODULE__, task) do
-    Agent.update(manager, fn list -> [task | list] end)
+    Agent.update(manager, fn list -> TaskList.add(list, task) end)
   end
 end
