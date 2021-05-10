@@ -1,6 +1,6 @@
-defmodule CLI do
+defmodule Td do
   @moduledoc """
-  Documentation for `CLI`.
+  Documentation for `Td`.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule CLI do
 
   ## Examples
 
-      iex> CLI.hello()
+      iex> Td.hello()
       :world
 
   """
