@@ -1,5 +1,5 @@
 defmodule TD.CLI do
-  alias TD.Boundary.Command
+  alias TD.Core.Command
 
   def main(args) do
     with %{status: :ok} <- cmd = Command.parse(args) do

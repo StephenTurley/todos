@@ -8,7 +8,7 @@ defmodule Core.Boundary.TaskValidator do
     with true <- Map.has_key?(fields, required) do
       matcher.(errors, Map.fetch!(fields, required))
     else
-      false -> [{"#{required} is required"} | errors]
+      false -> ["#{required} is required" | errors]
     end
   end
 
@@ -16,9 +16,9 @@ defmodule Core.Boundary.TaskValidator do
     with true <- String.match?(field, ~r{\S}) do
       :ok
     else
-      false -> [{"title must not be empty"} | errors]
+      false -> ["title must not be empty" | errors]
     end
   end
 
-  defp valid_title(errors, _field), do: [{"title must be a string"} | errors]
+  defp valid_title(errors, _field), do: ["title must be a string" | errors]
 end
