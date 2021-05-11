@@ -5,7 +5,7 @@ defmodule TD.CLI do
   def main(args) do
     Command.parse(args)
     |> CommandProcessor.process()
-    |> print_response
+    |> print_response()
   end
 
   defp print_response(%{status: :ok, response: responses}) do
