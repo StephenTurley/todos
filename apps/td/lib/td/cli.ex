@@ -1,33 +1,14 @@
 defmodule TD.CLI do
-  alias Core.Server
+  alias TD.Boundary.Command
 
   def main(args) do
-    with {:ok, _} <- process(args) do
+    with {:ok, messages} <- Command.process(args) do
+      Enum.each(messages, &IO.puts/1)
       System.stop(0)
     else
-      _error -> System.stop(1)
+      {:error, errors} ->
+        Enum.each(errors, fn error -> IO.puts(:stderr, error) end)
+        System.stop(1)
     end
-
-    # options = [switches: [file: :string], aliases: [f: :file]]
-    # {opts, _, _} = OptionParser.parse(args, options)
-    # IO.inspect(opts, label: "Command Line Arguments")
-  end
-
-  defp process(["add", title]) do
-    Server.add_task(%{title: title})
-  end
-
-  defp process([]) do
-    with {:ok, tasks} = response <- Server.all() do
-      Enum.map(tasks, fn t -> IO.puts(t.title) end)
-      response
-    else
-      _ -> :error
-    end
-  end
-
-  defp process(_) do
-    IO.puts(:stderr, "Invalid Command")
-    :error
   end
 end

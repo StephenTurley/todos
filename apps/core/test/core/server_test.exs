@@ -18,7 +18,7 @@ defmodule Core.ServerTest do
 
   describe "validations" do
     test "you must have a title" do
-      assert [{:error, "title is required"}] == Server.add_task(%{})
+      assert [{"title is required"}] == Server.add_task(%{})
     end
   end
 end
