@@ -1,24 +1,19 @@
 defmodule TD.Boundary.Command do
-  alias Core.Server
-  alias Core.Task
+  defstruct [:type, :body, :response, :status]
 
-  def process(["add", title]) do
-    with {:ok, task} <- Server.add_task(%{title: title}) do
-      {:ok, [Task.toString(task)]}
-    else
-      errors -> {:error, errors}
-    end
+  def new(fields) do
+    struct!(__MODULE__, fields)
   end
 
-  def process([]) do
-    with {:ok, tasks} <- Server.all() do
-      {:ok, Enum.map(tasks, &Task.toString/1)}
-    else
-      errors -> {:error, errors}
-    end
+  def parse(["add", title]) do
+    new(type: "add", body: %{title: title}, response: [], status: :ok)
   end
 
-  def process(_) do
-    {:error, ["Invalid Command"]}
+  def parse([]) do
+    new(type: "all", body: nil, response: [], status: :ok)
+  end
+
+  def parse(_) do
+    new(type: "invalid", body: nil, response: ["Invalid Command"], status: :error)
   end
 end
