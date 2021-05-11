@@ -27,7 +27,10 @@ defmodule Td.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:core, in_umbrella: true}
+      {:core, in_umbrella: true},
+      {:tesla, "~> 1.4.0"},
+      {:hackney, "~> 1.17.0"},
+      {:jason, ">= 1.0.0"}
     ]
   end
 end

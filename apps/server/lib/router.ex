@@ -7,6 +7,7 @@ defmodule Router do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
   plug(:dispatch)
 
+  # TODO 404 when route is not matched
   post "/task" do
     conn
     |> add_task

@@ -1,10 +1,10 @@
 defmodule TD.Core.CommandTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias TD.Core.Command
   alias Core.Task
 
-  describe "add" do
+  describe "parsing add commmand" do
     test "builds the add command" do
       result = Command.parse(["add", "foo bar"])
 
@@ -28,7 +28,7 @@ defmodule TD.Core.CommandTest do
     end
   end
 
-  describe "all" do
+  describe "parsing empty args" do
     test "it builds the all command" do
       result = Command.parse([])
 
@@ -41,7 +41,7 @@ defmodule TD.Core.CommandTest do
     end
   end
 
-  describe "invalid" do
+  describe "parsing an invalid commmand" do
     test "it builds the invalid command" do
       result = Command.parse(["not a thing"])
 
@@ -51,6 +51,32 @@ defmodule TD.Core.CommandTest do
                response: ["invalid command"],
                status: :error
              }
+    end
+  end
+
+  describe "add_response/2" do
+    test "should add the responses" do
+      result =
+        Command.parse([])
+        |> Command.add_response("first")
+        |> Command.add_response("second")
+
+      assert result.response == ["first", "second"]
+      assert result.status == :ok
+    end
+  end
+
+  describe "add_error" do
+    test "should update the status from :ok to :error" do
+      result =
+        Command.parse([])
+        |> Command.add_response("first")
+        |> Command.add_response("second")
+        |> Command.add_error("oops")
+        |> Command.add_error("it broke")
+
+      assert result.response == ["oops", "it broke"]
+      assert result.status == :error
     end
   end
 end

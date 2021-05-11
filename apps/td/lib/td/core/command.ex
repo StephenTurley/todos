@@ -24,4 +24,20 @@ defmodule TD.Core.Command do
   def parse(_) do
     new(type: :invalid, body: %{}, response: ["invalid command"], status: :error)
   end
+
+  def add_response(cmd, response) do
+    responses = cmd.response ++ [response]
+    Map.put(cmd, :response, responses)
+  end
+
+  def add_error(%{status: :ok} = cmd, error) do
+    cmd
+    |> Map.put(:status, :error)
+    |> Map.put(:response, [])
+    |> add_response(error)
+  end
+
+  def add_error(%{status: :error} = cmd, error) do
+    add_response(cmd, error)
+  end
 end
