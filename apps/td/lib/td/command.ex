@@ -1,9 +1,10 @@
 defmodule TD.Boundary.Command do
   alias Core.Server
+  alias Core.Task
 
   def process(["add", title]) do
     with {:ok, task} <- Server.add_task(%{title: title}) do
-      {:ok, [task.title]}
+      {:ok, [Task.toString(task)]}
     else
       errors -> {:error, errors}
     end
@@ -11,7 +12,7 @@ defmodule TD.Boundary.Command do
 
   def process([]) do
     with {:ok, tasks} <- Server.all() do
-      {:ok, Enum.map(tasks, fn t -> t.title end)}
+      {:ok, Enum.map(tasks, &Task.toString/1)}
     else
       errors -> {:error, errors}
     end

@@ -8,7 +8,7 @@ defmodule TD.CLI do
     else
       {:error, errors} ->
         Enum.each(errors, fn error -> IO.puts(:stderr, error) end)
-        System.stop(1)
+        System.halt(1)
     end
   end
 end
