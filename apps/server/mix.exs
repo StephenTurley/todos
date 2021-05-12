@@ -9,6 +9,7 @@ defmodule Server.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
+      elixirc_paths: elixirc_paths(Mix.env()),
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -27,13 +28,19 @@ defmodule Server.MixProject do
     [
       {:plug_cowboy, "~> 2.0"},
       {:core, in_umbrella: true},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+      {:ecto_sql, "~> 3.0"},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 
   defp aliases do
     [
-      test: "test --no-start"
+      # test: "test --no-start"
     ]
   end
+
+  # Specifies which paths to compile per environment.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 end

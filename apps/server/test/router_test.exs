@@ -3,18 +3,19 @@ defmodule RouterTest do
   use Plug.Test
 
   alias Boundary.TaskManager
+  alias Server.Boundary.TaskRepo
 
   @opts Router.init([])
 
   setup do
-    %{pid: start_supervised!(TaskManager)}
+    TaskManager.clear()
   end
 
   describe "getting tasks" do
-    test "returns all the tasks", %{pid: pid} do
+    test "returns all the tasks" do
       tasks = [%{title: "foo"}, %{title: "bar"}]
 
-      Enum.each(tasks, fn t -> TaskManager.add(pid, t) end)
+      Enum.each(tasks, fn t -> TaskManager.add(t) end)
 
       conn =
         conn(:get, "/task")

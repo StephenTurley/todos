@@ -5,18 +5,17 @@ defmodule Boundary.TaskManagerTest do
   alias Core.Task
 
   setup do
-    task_manager = start_supervised!(TaskManager)
-    %{task_manager: task_manager}
+    TaskManager.clear()
   end
 
   test "starts with empty list", %{task_manager: task_manager} do
-    assert TaskManager.all(task_manager) == []
+    assert TaskManager.all() == []
   end
 
   test "can add a new Task", %{task_manager: task_manager} do
-    TaskManager.add(task_manager, Task.new(title: "Flerpn"))
+    TaskManager.add(Task.new(title: "Flerpn"))
 
-    assert TaskManager.all(task_manager) == [
+    assert TaskManager.all() == [
              %Task{title: "Flerpn"}
            ]
   end

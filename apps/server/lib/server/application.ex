@@ -8,6 +8,7 @@ defmodule Server.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Server.Boundary.TaskRepo, name: Server.Boundary.TaskRepo},
       {Boundary.TaskManager, name: Boundary.TaskManager},
       {Plug.Cowboy, scheme: :http, plug: Router, options: [port: 4001]}
     ]

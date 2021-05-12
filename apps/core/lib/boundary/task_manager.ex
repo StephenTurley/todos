@@ -13,4 +13,9 @@ defmodule Boundary.TaskManager do
   def add(manager \\ __MODULE__, task) do
     Agent.update(manager, fn list -> TaskList.add(list, task) end)
   end
+
+  # TODO test me
+  def clear(manager \\ __MODULE__) do
+    Agent.update(manager, fn _ -> [] end)
+  end
 end

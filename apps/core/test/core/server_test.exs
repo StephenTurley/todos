@@ -4,10 +4,6 @@ defmodule Core.ServerTest do
   alias Core.Task
   alias Boundary.TaskManager
 
-  setup do
-    %{pid: start_supervised!(TaskManager)}
-  end
-
   test "you can add a task" do
     assert {:ok, task} = Server.add_task(%{title: "Foo"})
 
