@@ -4,6 +4,7 @@ defmodule TD.Boundary.CommandProcessorTest do
 
   alias TD.Core.Command
   alias TD.Boundary.CommandProcessor
+  alias Core.Task
 
   describe "Command in an error status" do
     test "it should not be changed" do
@@ -43,6 +44,17 @@ defmodule TD.Boundary.CommandProcessorTest do
     end
   end
 
+  describe "all" do
+    setup :stub_all
+
+    test "it should collect the response to strings" do
+      result = Command.parse([]) |> CommandProcessor.process()
+
+      assert result.response == ["you", "did it"]
+      assert result.status == :ok
+    end
+  end
+
   defp stub_error(_) do
     mock(fn _ -> json("{}", status: 500) end)
     :ok
@@ -51,6 +63,16 @@ defmodule TD.Boundary.CommandProcessorTest do
   defp stub_add(_) do
     mock(fn %{method: :post, url: "http://localhost:4001/task", body: body} ->
       json(~s([#{body}]), status: 201)
+    end)
+
+    :ok
+  end
+
+  defp stub_all(_) do
+    response = [Task.new(title: "you"), Task.new(title: "did it")]
+
+    mock(fn %{method: :get, url: "http://localhost:4001/task"} ->
+      json(Jason.encode!(response))
     end)
 
     :ok
