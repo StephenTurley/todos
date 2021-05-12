@@ -8,7 +8,7 @@ defmodule TD.Boundary.CommandProcessor do
   end
 
   def process(%{type: :add, body: task} = cmd) do
-    with {:ok, response} <- API.add_task(task) do
+    with {:ok, %{status: 201} = response} <- API.add_task(task) do
       response.body
       |> Jason.decode!(keys: :atoms!)
       |> Enum.map(&task_string/1)

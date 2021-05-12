@@ -1,23 +1,10 @@
 defmodule TD.Boundary.CommandProcessorTest do
   use ExUnit.Case
+  import Tesla.Mock
 
   alias TD.Core.Command
   alias TD.Boundary.CommandProcessor
   alias Core.Task
-
-  setup do
-    Tesla.Mock.mock(fn env ->
-      case env do
-        %{method: :post, url: "http://localhost:4001/task", body: body} ->
-          %Tesla.Env{status: 200, body: Jason.encode!([Jason.decode!(body)])}
-
-        _ ->
-          %Tesla.Env{status: 404}
-      end
-    end)
-
-    :ok
-  end
 
   describe "Command in an error status" do
     test "it should not be changed" do
@@ -31,7 +18,35 @@ defmodule TD.Boundary.CommandProcessorTest do
     end
   end
 
+  describe "add with server error" do
+    setup do
+      mock(fn
+        %{url: "http://localhost:4001/task"} -> json("{}", status: 500)
+      end)
+
+      :ok
+    end
+
+    test "it should return an error status" do
+      result =
+        Command.parse(["add", "yo dawg"])
+        |> CommandProcessor.process()
+
+      assert result.response == ["Server Error"]
+      assert result.status == :error
+    end
+  end
+
   describe "add" do
+    setup do
+      mock(fn
+        %{method: :post, url: "http://localhost:4001/task", body: body} ->
+          json(~s([#{body}]), status: 201)
+      end)
+
+      :ok
+    end
+
     test "it should collect the response to strings" do
       result =
         Command.parse(["add", "yo dawg"])
