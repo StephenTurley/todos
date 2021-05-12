@@ -29,13 +29,7 @@ defmodule RouterTest do
 
   describe "adding a task" do
     test "updates the list" do
-      task = Jason.encode!(%{"title" => "FlerpnDerpn"})
-
-      conn =
-        conn(:post, "/task", task)
-        |> Plug.Conn.put_req_header("content-type", "application/json")
-        |> Plug.Conn.put_req_header("accept", "application/json")
-        |> Router.call(@opts)
+      conn = post(Jason.encode!(%{"title" => "FlerpnDerpn"}))
 
       assert conn.state == :sent
       assert conn.status == 201
@@ -43,16 +37,17 @@ defmodule RouterTest do
     end
 
     test "returns 400 error when title is missing" do
-      task = Jason.encode!(%{})
-
-      conn =
-        conn(:post, "/task", task)
-        |> Plug.Conn.put_req_header("content-type", "application/json")
-        |> Plug.Conn.put_req_header("accept", "application/json")
-        |> Router.call(@opts)
+      conn = post(Jason.encode!(%{}))
 
       assert conn.state == :sent
       assert conn.status == 400
+    end
+
+    defp post(task) do
+      conn(:post, "/task", task)
+      |> Plug.Conn.put_req_header("content-type", "application/json")
+      |> Plug.Conn.put_req_header("accept", "application/json")
+      |> Router.call(@opts)
     end
   end
 
