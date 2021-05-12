@@ -18,6 +18,10 @@ defmodule Router do
     send_all({:ok, conn})
   end
 
+  match _ do
+    send_resp(conn, 404, "not found")
+  end
+
   defp send_all(res, status \\ 200)
 
   defp send_all({:error, conn}, _status) do

@@ -55,4 +55,15 @@ defmodule RouterTest do
       assert conn.status == 400
     end
   end
+
+  describe "not found" do
+    test "returns a 404" do
+      conn =
+        conn(:get, "/not_a_thing")
+        |> Router.call(@opts)
+
+      assert conn.state == :sent
+      assert conn.status == 404
+    end
+  end
 end
