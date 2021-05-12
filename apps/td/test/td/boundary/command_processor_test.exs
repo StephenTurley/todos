@@ -4,7 +4,6 @@ defmodule TD.Boundary.CommandProcessorTest do
 
   alias TD.Core.Command
   alias TD.Boundary.CommandProcessor
-  alias Core.Task
 
   describe "Command in an error status" do
     test "it should not be changed" do
@@ -19,13 +18,7 @@ defmodule TD.Boundary.CommandProcessorTest do
   end
 
   describe "add with server error" do
-    setup do
-      mock(fn
-        %{url: "http://localhost:4001/task"} -> json("{}", status: 500)
-      end)
-
-      :ok
-    end
+    setup :stub_error
 
     test "it should return an error status" do
       result =
@@ -38,14 +31,7 @@ defmodule TD.Boundary.CommandProcessorTest do
   end
 
   describe "add" do
-    setup do
-      mock(fn
-        %{method: :post, url: "http://localhost:4001/task", body: body} ->
-          json(~s([#{body}]), status: 201)
-      end)
-
-      :ok
-    end
+    setup :stub_add
 
     test "it should collect the response to strings" do
       result =
@@ -55,5 +41,18 @@ defmodule TD.Boundary.CommandProcessorTest do
       assert result.response == ["yo dawg"]
       assert result.status == :ok
     end
+  end
+
+  defp stub_error(_) do
+    mock(fn _ -> json("{}", status: 500) end)
+    :ok
+  end
+
+  defp stub_add(_) do
+    mock(fn %{method: :post, url: "http://localhost:4001/task", body: body} ->
+      json(~s([#{body}]), status: 201)
+    end)
+
+    :ok
   end
 end
