@@ -55,6 +55,17 @@ defmodule TD.Boundary.CommandProcessorTest do
     end
   end
 
+  describe "all with error" do
+    setup :stub_error
+
+    test "it should collect the response to strings" do
+      result = Command.parse([]) |> CommandProcessor.process()
+
+      assert result.response == ["Server Error"]
+      assert result.status == :error
+    end
+  end
+
   defp stub_error(_) do
     mock(fn _ -> json("{}", status: 500) end)
     :ok
