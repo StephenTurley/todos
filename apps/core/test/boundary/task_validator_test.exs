@@ -1,7 +1,6 @@
 defmodule TaskValidatorTest do
   use ExUnit.Case
   alias Core.Boundary.TaskValidator
-  alias Core.Task
 
   test "returns ok for valid task" do
     assert :ok = TaskValidator.errors(%{title: "foo"})

@@ -1,6 +1,5 @@
 defmodule Server.Boundary.TaskController do
   import Plug.Conn
-  alias Core.Server
 
   def send_all(res, status \\ 200)
 

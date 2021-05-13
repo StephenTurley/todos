@@ -7,9 +7,7 @@ defmodule Td.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      {Boundary.TaskManager, name: Boundary.TaskManager}
-    ]
+    children = []
 
     opts = [strategy: :one_for_one, name: Td.Supervisor]
     Supervisor.start_link(children, opts)

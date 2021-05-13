@@ -1,5 +1,5 @@
-defmodule Core.Server do
-  alias Boundary.TaskManager
+defmodule Server do
+  alias Server.Boundary.TaskManager
   alias Core.Boundary.TaskValidator
   alias Core.Task
 

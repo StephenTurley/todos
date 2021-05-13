@@ -2,8 +2,7 @@ defmodule RouterTest do
   use ExUnit.Case, async: false
   use Plug.Test
 
-  alias Boundary.TaskManager
-  alias Server.Boundary.TaskRepo
+  alias Server.Boundary.TaskManager
 
   @opts Router.init([])
 

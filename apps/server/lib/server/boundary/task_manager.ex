@@ -1,4 +1,4 @@
-defmodule Boundary.TaskManager do
+defmodule Server.Boundary.TaskManager do
   use Agent
   alias Core.TaskList
 
@@ -14,7 +14,6 @@ defmodule Boundary.TaskManager do
     Agent.update(manager, fn list -> TaskList.add(list, task) end)
   end
 
-  # TODO test me
   def clear(manager \\ __MODULE__) do
     Agent.update(manager, fn _ -> [] end)
   end

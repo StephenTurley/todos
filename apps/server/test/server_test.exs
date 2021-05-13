@@ -1,8 +1,11 @@
-defmodule Core.ServerTest do
+defmodule ServerTest do
   use ExUnit.Case, async: false
-  alias Core.Server
   alias Core.Task
-  alias Boundary.TaskManager
+  alias Server.Boundary.TaskManager
+
+  setup do
+    TaskManager.clear()
+  end
 
   test "you can add a task" do
     assert {:ok, task} = Server.add_task(%{title: "Foo"})
