@@ -11,29 +11,13 @@ defmodule Core.MixProject do
       lockfile: "../../mix.lock",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
-      deps: deps(),
-      aliases: aliases()
+      deps: deps()
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
-  def application do
-    [
-      extra_applications: [:logger]
-    ]
-  end
-
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # TODO remove this
       {:jason, "~> 1.2"}
-    ]
-  end
-
-  defp aliases do
-    [
-      # test: "test --no-start"
     ]
   end
 end
