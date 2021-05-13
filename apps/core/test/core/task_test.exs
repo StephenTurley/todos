@@ -8,6 +8,11 @@ defmodule Core.TaskTest do
       assert result.title == "FooBar"
     end
 
+    test "has optional id" do
+      result = Task.new(id: 1, title: "FooBar")
+      assert result.id == 1
+    end
+
     test "turn into json" do
       task = Task.new(title: "FooBar")
 
