@@ -6,15 +6,24 @@ defmodule Server.Boundary.TaskManager do
     Agent.start_link(&TaskList.new/0, name: __MODULE__)
   end
 
-  def all(manager \\ __MODULE__) do
-    Agent.get(manager, &Function.identity/1)
+  def all() do
+    Agent.get(__MODULE__, &Function.identity/1)
   end
 
-  def add(manager \\ __MODULE__, task) do
-    Agent.update(manager, fn list -> TaskList.add(list, task) end)
+  def all(provider) do
+    Agent.update(__MODULE__, provider)
+    all()
   end
 
-  def clear(manager \\ __MODULE__) do
-    Agent.update(manager, fn _ -> [] end)
+  def add(task) do
+    Agent.update(__MODULE__, fn list -> TaskList.add(list, task) end)
+  end
+
+  def add(task, persister) do
+    with {:ok, t} <- persister.(task), do: add(t)
+  end
+
+  def clear() do
+    Agent.update(__MODULE__, fn _ -> [] end)
   end
 end
