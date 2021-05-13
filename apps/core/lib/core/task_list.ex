@@ -1,6 +1,6 @@
 defmodule Core.TaskList do
-  def new() do
-    []
+  def new(list \\ []) do
+    list
   end
 
   def add(list, task) do

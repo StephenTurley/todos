@@ -1,16 +1,18 @@
 defmodule Server do
   alias Server.Boundary.TaskManager
+  alias Server.Boundary.TaskPersistence, as: DB
   alias Core.Boundary.TaskValidator
   alias Core.Task
 
   def all() do
-    {:ok, TaskManager.all()}
+    tasks = TaskManager.all(&DB.all/0)
+    {:ok, tasks}
   end
 
   def add_task(fields) do
     with :ok <- TaskValidator.errors(fields),
          task <- Task.new(fields),
-         :ok <- TaskManager.add(task) do
+         :ok <- TaskManager.add(task, &DB.add/1) do
       {:ok, task}
     else
       errors -> errors

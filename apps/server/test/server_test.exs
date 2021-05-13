@@ -1,18 +1,21 @@
 defmodule ServerTest do
-  use ExUnit.Case, async: false
-  alias Core.Task
+  use Server.RepoCase, async: false
   alias Server.Boundary.TaskManager
+  alias Server.Boundary.TaskPersistence
 
   setup do
-    TaskManager.clear()
+    TaskManager.clear(&TaskPersistence.clear/0)
   end
 
   test "you can add a task" do
-    assert {:ok, task} = Server.add_task(%{title: "Foo"})
+    {:ok, task} = Server.add_task(%{title: "Foo"})
 
-    assert task == %Task{title: "Foo"}
+    assert task.title == "Foo"
 
-    assert {:ok, [%Task{title: "Foo"}]} == Server.all()
+    {:ok, [persisted]} = Server.all()
+
+    assert persisted.id != nil
+    assert persisted.title == task.title
   end
 
   describe "validations" do

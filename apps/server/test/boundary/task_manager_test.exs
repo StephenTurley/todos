@@ -15,7 +15,7 @@ defmodule Server.Boundary.TaskManagerTest do
 
     test "can be called with an external provider" do
       tasks = [Task.new(title: "foo")]
-      provider = fn _ -> tasks end
+      provider = fn -> tasks end
 
       result = TaskManager.all(provider)
       assert result == tasks
@@ -39,16 +39,42 @@ defmodule Server.Boundary.TaskManagerTest do
 
       persister = fn t ->
         send(self(), t)
-        {:ok, Task.new(title: "Flerpn Persisted")}
+        Task.new(title: "Flerpn Persisted")
       end
 
-      TaskManager.add(task, persister)
+      :ok = TaskManager.add(task, persister)
 
       assert_received(^task)
 
       assert TaskManager.all() == [
                %Task{title: "Flerpn Persisted"}
              ]
+    end
+  end
+
+  describe "clear" do
+    test "can clear tasks" do
+      TaskManager.add(Task.new(title: "Flerpn"))
+
+      TaskManager.clear()
+
+      assert TaskManager.all() == []
+    end
+
+    test "it can persist the clear" do
+      task = Task.new(title: "Flerpn")
+
+      persister = fn ->
+        send(self(), :clear)
+        :ok
+      end
+
+      TaskManager.add(task)
+      TaskManager.clear(persister)
+
+      assert_received(:clear)
+
+      assert TaskManager.all() == []
     end
   end
 end

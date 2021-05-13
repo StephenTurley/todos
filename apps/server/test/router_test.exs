@@ -3,18 +3,20 @@ defmodule RouterTest do
   use Plug.Test
 
   alias Server.Boundary.TaskManager
+  alias Server.Boundary.TaskPersistence
 
   @opts Router.init([])
 
   setup do
-    TaskManager.clear()
+    TaskManager.clear(&TaskPersistence.clear/0)
   end
 
   describe "getting tasks" do
     test "returns all the tasks" do
-      tasks = [%{title: "foo"}, %{title: "bar"}]
+      [%{title: "foo"}, %{title: "bar"}]
+      |> Enum.each(&Server.add_task/1)
 
-      Enum.each(tasks, fn t -> TaskManager.add(t) end)
+      {:ok, tasks} = Server.all()
 
       conn =
         conn(:get, "/task")
@@ -33,7 +35,11 @@ defmodule RouterTest do
 
       assert conn.state == :sent
       assert conn.status == 201
-      assert conn.resp_body == Jason.encode!([%{"id" => nil, "title" => "FlerpnDerpn"}])
+      assert Enum.count(Jason.decode!(conn.resp_body)) == 1
+
+      assert Jason.decode!(conn.resp_body)
+             |> List.first()
+             |> Map.get("title") == "FlerpnDerpn"
     end
 
     test "returns 400 error when title is missing" do

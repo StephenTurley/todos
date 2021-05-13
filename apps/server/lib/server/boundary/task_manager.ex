@@ -11,7 +11,7 @@ defmodule Server.Boundary.TaskManager do
   end
 
   def all(provider) do
-    Agent.update(__MODULE__, provider)
+    Agent.update(__MODULE__, fn _ -> provider.() end)
     all()
   end
 
@@ -20,10 +20,14 @@ defmodule Server.Boundary.TaskManager do
   end
 
   def add(task, persister) do
-    with {:ok, t} <- persister.(task), do: add(t)
+    persister.(task) |> IO.inspect() |> add
   end
 
   def clear() do
     Agent.update(__MODULE__, fn _ -> [] end)
+  end
+
+  def clear(persister) do
+    with :ok <- persister.(), do: clear()
   end
 end
