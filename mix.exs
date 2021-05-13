@@ -22,7 +22,7 @@ defmodule Todos.MixProject do
 
   defp aliases do
     [
-      # test: "test --no-start"
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
