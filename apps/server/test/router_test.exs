@@ -33,7 +33,7 @@ defmodule RouterTest do
 
       assert conn.state == :sent
       assert conn.status == 201
-      assert conn.resp_body == Jason.encode!([%{"title" => "FlerpnDerpn"}])
+      assert conn.resp_body == Jason.encode!([%{"id" => nil, "title" => "FlerpnDerpn"}])
     end
 
     test "returns 400 error when title is missing" do

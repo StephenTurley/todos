@@ -1,5 +1,5 @@
 defmodule Core.Task do
-  @derive {Jason.Encoder, only: [:title]}
+  @derive {Jason.Encoder, only: [:id, :title]}
   defstruct [:id, :title]
 
   def new(args) do

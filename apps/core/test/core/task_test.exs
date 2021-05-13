@@ -14,11 +14,11 @@ defmodule Core.TaskTest do
     end
 
     test "turn into json" do
-      task = Task.new(title: "FooBar")
+      task = Task.new(id: 1, title: "FooBar")
 
       result = Jason.encode!(task)
 
-      assert result == ~s({"title":"FooBar"})
+      assert result == ~s({"id":1,"title":"FooBar"})
     end
 
     test "should turn into a console message" do
