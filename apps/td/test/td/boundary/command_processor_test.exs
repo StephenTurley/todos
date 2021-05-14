@@ -34,12 +34,12 @@ defmodule TD.Boundary.CommandProcessorTest do
   describe "add" do
     setup :stub_add
 
-    test "it should collect the response to strings" do
+    test "it should collect the tasks" do
       result =
         Command.parse(["add", "yo dawg"])
         |> CommandProcessor.process()
 
-      assert result.tasks == [%Task{id: nil, title: "yo dawg"}]
+      assert result.tasks == [Task.new(title: "yo dawg")]
       assert result.status == :ok
     end
   end
@@ -47,11 +47,11 @@ defmodule TD.Boundary.CommandProcessorTest do
   describe "all" do
     setup :stub_all
 
-    test "it should collect the response to strings" do
+    test "it should collect the tasks" do
       result = Command.parse([]) |> CommandProcessor.process()
 
       assert result.tasks ==
-               [%Task{id: nil, title: "you"}, %Task{id: nil, title: "did it"}]
+               [Task.new(title: "you"), Task.new(title: "did it")]
 
       assert result.status == :ok
     end

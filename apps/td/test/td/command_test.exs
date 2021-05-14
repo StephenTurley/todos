@@ -10,7 +10,7 @@ defmodule TD.Core.CommandTest do
 
       assert result == %Command{
                type: :add,
-               body: %Task{title: "foo bar"},
+               body: Task.new(title: "foo bar"),
                tasks: [],
                response: [],
                status: :ok

@@ -30,7 +30,7 @@ defmodule Server.Boundary.TaskManagerTest do
       TaskManager.add(Task.new(title: "Flerpn"))
 
       assert TaskManager.all() == [
-               %Task{title: "Flerpn"}
+               Task.new(title: "Flerpn")
              ]
     end
 
@@ -47,7 +47,7 @@ defmodule Server.Boundary.TaskManagerTest do
       assert_received(^task)
 
       assert TaskManager.all() == [
-               %Task{title: "Flerpn Persisted"}
+               Task.new(title: "Flerpn Persisted")
              ]
     end
   end

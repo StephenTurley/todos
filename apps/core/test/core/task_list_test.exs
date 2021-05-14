@@ -10,6 +10,6 @@ defmodule Server.Core.TaskListTest do
       |> TaskList.add(Task.new(title: "flerpn"))
       |> TaskList.add(Task.new(title: "derpn"))
 
-    assert result == [%Task{title: "flerpn"}, %Task{title: "derpn"}]
+    assert result == [Task.new(title: "flerpn"), Task.new(title: "derpn")]
   end
 end
