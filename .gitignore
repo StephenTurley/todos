@@ -24,3 +24,4 @@ erl_crash.dump
 /tmp
 .elixir_ls/
 mix.lock
+/apps/td/td
