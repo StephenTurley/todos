@@ -22,6 +22,8 @@ defmodule Server.Boundary.TaskController do
     end
   end
 
+  def complete_task(conn), do: conn
+
   def create_task(params) do
     %{title: params["title"]}
   end

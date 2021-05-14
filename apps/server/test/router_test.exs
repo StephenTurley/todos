@@ -1,5 +1,5 @@
 defmodule RouterTest do
-  use ExUnit.Case, async: false
+  use Server.RepoCase, async: false
   use Plug.Test
 
   alias Server.Boundary.TaskManager

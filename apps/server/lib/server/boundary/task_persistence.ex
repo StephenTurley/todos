@@ -14,7 +14,7 @@ defmodule Server.Boundary.TaskPersistence do
   def all() do
     from(
       t in TaskSchema,
-      select: %{id: t.id, title: t.title}
+      select: %{id: t.id, title: t.title, is_complete: t.is_complete}
     )
     |> TaskRepo.all()
     |> Enum.map(&to_task/1)
@@ -26,10 +26,23 @@ defmodule Server.Boundary.TaskPersistence do
     :ok
   end
 
-  defp to_task(%{id: id, title: title}) do
+  def find_by(title: title) do
+    TaskRepo.get_by!(TaskSchema, title: title)
+    |> to_task
+  end
+
+  def update_is_complete(task) do
+    TaskRepo.get!(TaskSchema, task.id)
+    |> TaskSchema.change_is_complete(task.is_complete)
+    |> TaskRepo.update!()
+    |> to_task()
+  end
+
+  defp to_task(t) do
     Task.new(
-      title: title,
-      id: id
+      title: t.title,
+      id: t.id,
+      is_complete: t.is_complete
     )
   end
 end

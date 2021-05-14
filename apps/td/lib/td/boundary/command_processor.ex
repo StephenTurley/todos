@@ -18,13 +18,14 @@ defmodule TD.Boundary.CommandProcessor do
   end
 
   def process(%{type: :done} = cmd) do
-    cmd
+    API.complete_task(cmd.body)
+    |> handle_response(cmd)
   end
 
   defp handle_response({:ok, %{status: status, body: body}}, cmd)
        when status in [200, 201] do
     body
-    |> Jason.decode!(keys: :atoms!)
+    |> Jason.decode!(keys: :atoms)
     |> Enum.map(&Task.new/1)
     |> set_tasks(cmd)
   end

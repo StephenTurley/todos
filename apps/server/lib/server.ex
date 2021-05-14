@@ -18,4 +18,8 @@ defmodule Server do
       errors -> errors
     end
   end
+
+  def complete_task(_title) do
+    :ok
+  end
 end

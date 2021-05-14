@@ -45,19 +45,26 @@ defmodule TD.Boundary.CommandProcessorTest do
   end
 
   describe "done" do
-    setup :stub_all
+    setup do
+      stub_complete_task(
+        title: 'some flerpn',
+        result: [Task.new(title: 'some flerpn'), Task.new(title: 'some derpn')]
+      )
+
+      :ok
+    end
 
     test "it should find and update the correct task" do
       result =
-        Command.parse(["done", "did it"])
+        Command.parse(["done", "some flerpn"])
         |> CommandProcessor.process()
 
-      # assert result.body ==
-      #          Task.new(
-      #            id: 2,
-      #            title: "did it",
-      #            is_complete: true
-      #          )
+      assert result.body == "some flerpn"
+
+      assert result.tasks == [
+               Task.new(title: 'some flerpn'),
+               Task.new(title: 'some derpn')
+             ]
     end
   end
 
@@ -85,6 +92,19 @@ defmodule TD.Boundary.CommandProcessorTest do
       assert result.response == ["Server Error"]
       assert result.status == :error
     end
+  end
+
+  # not a setup function.. kind of awkward
+  defp stub_complete_task(title: title, result: body) do
+    payload = %{
+      method: :post,
+      query: [{:title, title}],
+      url: "http://localhost:4001/task/complete"
+    }
+
+    mock(fn payload ->
+      json(Jason.encode!(body), status: 200)
+    end)
   end
 
   defp stub_error(_) do

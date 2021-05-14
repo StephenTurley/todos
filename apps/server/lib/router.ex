@@ -1,20 +1,27 @@
 defmodule Router do
   use Plug.Router
 
-  alias Server.Boundary.TaskController, as: TD
+  alias Server.Boundary.TaskController, as: TC
 
   plug(:match)
   plug(Plug.Parsers, parsers: [:json], json_decoder: Jason)
+  plug(Plug.Logger, log: :debug)
   plug(:dispatch)
 
   post "/task" do
     conn
-    |> TD.add_task()
-    |> TD.send_all(201)
+    |> TC.add_task()
+    |> TC.send_all(201)
   end
 
   get "/task" do
-    TD.send_all({:ok, conn})
+    TC.send_all({:ok, conn})
+  end
+
+  post "/task/complete" do
+    conn
+    |> TC.complete_task()
+    |> TC.send_all(201)
   end
 
   match _ do
