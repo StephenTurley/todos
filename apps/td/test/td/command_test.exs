@@ -44,6 +44,20 @@ defmodule TD.Core.CommandTest do
     end
   end
 
+  describe "parsing the done command" do
+    test "it builds the command" do
+      result = Command.parse(["done", "the title"])
+
+      assert result == %Command{
+               type: :done,
+               body: "the title",
+               tasks: [],
+               response: [],
+               status: :ok
+             }
+    end
+  end
+
   describe "parsing an invalid commmand" do
     test "it builds the invalid command" do
       result = Command.parse(["not a thing"])

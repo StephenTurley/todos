@@ -18,6 +18,10 @@ defmodule TD.Core.Command do
     end
   end
 
+  def parse(["done", title]) do
+    new(type: :done, body: title)
+  end
+
   def parse([]) do
     new(type: :all)
   end

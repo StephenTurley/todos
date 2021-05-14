@@ -8,28 +8,29 @@ defmodule TD.Boundary.CommandProcessor do
   end
 
   def process(%{type: :add, body: task} = cmd) do
-    with {:ok, %{status: 201} = response} <- API.add_task(task) do
-      handle_response(response.body, cmd)
-    else
-      _error ->
-        Command.add_error(cmd, "Server Error")
-    end
+    API.add_task(task)
+    |> handle_response(cmd)
   end
 
   def process(%{type: :all} = cmd) do
-    with {:ok, %{status: 200} = response} <- API.all() do
-      handle_response(response.body, cmd)
-    else
-      _error ->
-        Command.add_error(cmd, "Server Error")
-    end
+    API.all()
+    |> handle_response(cmd)
   end
 
-  defp handle_response(body, cmd) do
+  def process(%{type: :done} = cmd) do
+    cmd
+  end
+
+  defp handle_response({:ok, %{status: status, body: body}}, cmd)
+       when status in [200, 201] do
     body
     |> Jason.decode!(keys: :atoms!)
     |> Enum.map(&Task.new/1)
     |> set_tasks(cmd)
+  end
+
+  defp handle_response(_, cmd) do
+    Command.add_error(cmd, "Server Error")
   end
 
   defp set_tasks(tasks, command) do

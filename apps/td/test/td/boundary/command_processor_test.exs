@@ -44,14 +44,33 @@ defmodule TD.Boundary.CommandProcessorTest do
     end
   end
 
+  describe "done" do
+    setup :stub_all
+
+    test "it should find and update the correct task" do
+      result =
+        Command.parse(["done", "did it"])
+        |> CommandProcessor.process()
+
+      # assert result.body ==
+      #          Task.new(
+      #            id: 2,
+      #            title: "did it",
+      #            is_complete: true
+      #          )
+    end
+  end
+
   describe "all" do
     setup :stub_all
 
     test "it should collect the tasks" do
       result = Command.parse([]) |> CommandProcessor.process()
 
-      assert result.tasks ==
-               [Task.new(title: "you"), Task.new(title: "did it")]
+      assert result.tasks == [
+               Task.new(id: 1, title: "you"),
+               Task.new(id: 2, title: "did it")
+             ]
 
       assert result.status == :ok
     end
@@ -82,7 +101,7 @@ defmodule TD.Boundary.CommandProcessorTest do
   end
 
   defp stub_all(_) do
-    response = [Task.new(title: "you"), Task.new(title: "did it")]
+    response = [Task.new(id: 1, title: "you"), Task.new(id: 2, title: "did it")]
 
     mock(fn %{method: :get, url: "http://localhost:4001/task"} ->
       json(Jason.encode!(response))
