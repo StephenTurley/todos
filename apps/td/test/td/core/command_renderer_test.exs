@@ -15,7 +15,7 @@ defmodule TD.Core.CommandRendererTest do
       |> CommandRenderer.generate_response()
 
     assert to_string(result.response) ==
-             "\e[32mCompleted 0/2\e[31m✗ \e[36mOne\e[0m\e[31m✗ \e[36mTwo\e[0m"
+             "\e[32mCompleted 0/2\e[31m✗ \e[37mOne\e[0m\e[31m✗ \e[37mTwo\e[0m"
   end
 
   test "it does nothing when there is an error" do

@@ -23,7 +23,7 @@ defmodule TD.Core.CommandRenderer do
   end
 
   defp render_task(task) do
-    IO.ANSI.format([:red, "✗ ", :cyan, task.title], true)
+    IO.ANSI.format([:red, "✗ ", :white, task.title], true)
   end
 
   defp collect_responses(res, cmd) do
