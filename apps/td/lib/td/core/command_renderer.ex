@@ -2,6 +2,8 @@ defmodule TD.Core.CommandRenderer do
   alias TD.Core.Command
   # ✗✓
 
+  def generate_response(%{status: :error} = cmd), do: cmd
+
   def generate_response(cmd) do
     cmd
     |> response_header()
