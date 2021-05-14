@@ -1,28 +1,29 @@
 defmodule TD.Core.Command do
-  defstruct [:type, :body, :response, :status]
+  defstruct [:type, :body, :tasks, :response, :status]
   alias Core.Task
   alias Core.Boundary.TaskValidator
 
   def new(fields) do
-    struct!(__MODULE__, fields)
+    default = [body: %{}, tasks: [], response: [], status: :ok]
+    struct!(__MODULE__, Keyword.merge(default, fields))
   end
 
   def parse(["add", title]) do
     with task <- Task.new(title: title),
          :ok <- TaskValidator.errors(task) do
-      new(type: :add, body: task, response: [], status: :ok)
+      new(type: :add, body: task)
     else
       errors ->
-        new(type: :add, body: %{}, response: errors, status: :error)
+        new(type: :add, response: errors, status: :error)
     end
   end
 
   def parse([]) do
-    new(type: :all, body: %{}, response: [], status: :ok)
+    new(type: :all)
   end
 
   def parse(_) do
-    new(type: :invalid, body: %{}, response: ["invalid command"], status: :error)
+    new(type: :invalid, response: ["invalid command"], status: :error)
   end
 
   def add_response(cmd, response) do
@@ -39,5 +40,9 @@ defmodule TD.Core.Command do
 
   def add_error(%{status: :error} = cmd, error) do
     add_response(cmd, error)
+  end
+
+  def set_tasks(cmd, tasks) do
+    Map.put(cmd, :tasks, tasks)
   end
 end

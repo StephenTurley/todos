@@ -12,21 +12,15 @@ defmodule Core.TaskTest do
       result = Task.new(id: 1, title: "FooBar")
       assert result.id == 1
     end
+  end
 
+  describe "serialization" do
     test "turn into json" do
       task = Task.new(id: 1, title: "FooBar")
 
       result = Jason.encode!(task)
 
       assert result == ~s({"id":1,"title":"FooBar"})
-    end
-
-    test "should turn into a console message" do
-      task = Task.new(title: "FooBar")
-
-      result = Task.toString(task)
-
-      assert result == "FooBar"
     end
   end
 end

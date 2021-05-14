@@ -28,17 +28,11 @@ defmodule TD.Boundary.CommandProcessor do
   defp handle_response(body, cmd) do
     body
     |> Jason.decode!(keys: :atoms!)
-    |> Enum.map(&task_string/1)
-    |> List.foldl(cmd, &collect_response/2)
+    |> Enum.map(&Task.new/1)
+    |> set_tasks(cmd)
   end
 
-  defp task_string(json) do
-    json
-    |> Task.new()
-    |> Task.toString()
-  end
-
-  defp collect_response(response, command) do
-    Command.add_response(command, response)
+  defp set_tasks(tasks, command) do
+    Command.set_tasks(command, tasks)
   end
 end

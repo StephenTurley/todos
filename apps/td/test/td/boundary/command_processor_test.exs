@@ -39,7 +39,7 @@ defmodule TD.Boundary.CommandProcessorTest do
         Command.parse(["add", "yo dawg"])
         |> CommandProcessor.process()
 
-      assert result.response == ["yo dawg"]
+      assert result.tasks == [%Task{id: nil, title: "yo dawg"}]
       assert result.status == :ok
     end
   end
@@ -50,7 +50,9 @@ defmodule TD.Boundary.CommandProcessorTest do
     test "it should collect the response to strings" do
       result = Command.parse([]) |> CommandProcessor.process()
 
-      assert result.response == ["you", "did it"]
+      assert result.tasks ==
+               [%Task{id: nil, title: "you"}, %Task{id: nil, title: "did it"}]
+
       assert result.status == :ok
     end
   end

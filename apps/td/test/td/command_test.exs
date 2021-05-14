@@ -11,6 +11,7 @@ defmodule TD.Core.CommandTest do
       assert result == %Command{
                type: :add,
                body: %Task{title: "foo bar"},
+               tasks: [],
                response: [],
                status: :ok
              }
@@ -22,6 +23,7 @@ defmodule TD.Core.CommandTest do
       assert result == %Command{
                type: :add,
                body: %{},
+               tasks: [],
                response: ["title must not be empty"],
                status: :error
              }
@@ -35,6 +37,7 @@ defmodule TD.Core.CommandTest do
       assert result == %Command{
                type: :all,
                body: %{},
+               tasks: [],
                response: [],
                status: :ok
              }
@@ -48,6 +51,7 @@ defmodule TD.Core.CommandTest do
       assert result == %Command{
                type: :invalid,
                body: %{},
+               tasks: [],
                response: ["invalid command"],
                status: :error
              }

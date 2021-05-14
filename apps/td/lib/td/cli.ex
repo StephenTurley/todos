@@ -1,10 +1,12 @@
 defmodule TD.CLI do
   alias TD.Core.Command
+  alias TD.Core.CommandRenderer
   alias TD.Boundary.CommandProcessor
 
   def main(args) do
     Command.parse(args)
     |> CommandProcessor.process()
+    |> CommandRenderer.generate_response()
     |> print_response()
   end
 
