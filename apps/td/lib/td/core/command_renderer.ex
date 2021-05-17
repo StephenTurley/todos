@@ -11,8 +11,18 @@ defmodule TD.Core.CommandRenderer do
   end
 
   defp response_header(cmd) do
-    total = Enum.count(cmd.tasks)
-    header = IO.ANSI.green() <> "Completed 0/#{to_string(total)}"
+    completed =
+      cmd.tasks
+      |> Enum.filter(fn t -> t.is_complete end)
+      |> Enum.count()
+      |> to_string()
+
+    total =
+      cmd.tasks
+      |> Enum.count()
+      |> to_string
+
+    header = IO.ANSI.green() <> "Completed #{completed}/#{total}"
     Command.add_response(cmd, header)
   end
 
@@ -22,8 +32,12 @@ defmodule TD.Core.CommandRenderer do
     |> List.foldl(cmd, &collect_responses/2)
   end
 
-  defp render_task(task) do
+  defp render_task(%{is_complete: false} = task) do
     IO.ANSI.format([:red, "✗ ", :white, task.title], true)
+  end
+
+  defp render_task(%{is_complete: true} = task) do
+    IO.ANSI.format([:green, "✓ ", :white, task.title], true)
   end
 
   defp collect_responses(res, cmd) do

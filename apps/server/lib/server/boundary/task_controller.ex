@@ -22,7 +22,14 @@ defmodule Server.Boundary.TaskController do
     end
   end
 
-  def complete_task(conn), do: conn
+  def complete_task(conn) do
+    with task <- create_task(conn.params),
+         {:ok, _} <- Server.complete_task(task.title) do
+      {:ok, conn}
+    else
+      _errors -> {:error, conn}
+    end
+  end
 
   def create_task(params) do
     %{title: params["title"]}
