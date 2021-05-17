@@ -11,7 +11,8 @@ defmodule ServerTest do
     DB.add(Task.new(title: "Flerpn"))
     DB.add(Task.new(title: "Derpn"))
 
-    titles = Enum.map(Server.all(), & &1.title)
+    {:ok, tasks} = Server.all()
+    titles = Enum.map(tasks, fn t -> t.title end)
     assert titles == ["Flerpn", "Derpn"]
   end
 
@@ -24,6 +25,16 @@ defmodule ServerTest do
 
     assert persisted.id != nil
     assert persisted.title == task.title
+  end
+
+  test "can complete a task" do
+    DB.add(Task.new(title: "Flerpn", is_complete: false))
+
+    Server.complete_task("Flerpn")
+
+    {:ok, [task]} = Server.all()
+
+    assert task.is_complete
   end
 
   describe "validations" do

@@ -18,7 +18,9 @@ defmodule Server do
     end
   end
 
-  def complete_task(_title) do
-    :ok
+  def complete_task(title) do
+    DB.find_by(title: title)
+    |> Task.complete()
+    |> DB.update_is_complete()
   end
 end
