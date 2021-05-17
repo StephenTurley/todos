@@ -1,7 +1,8 @@
-defmodule TD.Boundary.CommandProcessorTest do
+defmodule TD.TDTest do
   use ExUnit.Case
   import Tesla.Mock
 
+  alias TD.Core.CommandParser
   alias TD.Core.Command
   alias TD.Boundary.CommandProcessor
   alias Core.Task
@@ -9,7 +10,7 @@ defmodule TD.Boundary.CommandProcessorTest do
   describe "Command in an error status" do
     test "it should not be changed" do
       cmd =
-        Command.parse(["add", "yo dawg"])
+        CommandParser.parse(["--add", "yo dawg"])
         |> Command.add_error("it died")
 
       result = CommandProcessor.process(cmd)
@@ -23,7 +24,7 @@ defmodule TD.Boundary.CommandProcessorTest do
 
     test "it should return an error status" do
       result =
-        Command.parse(["add", "yo dawg"])
+        CommandParser.parse(["--add", "yo dawg"])
         |> CommandProcessor.process()
 
       assert result.response == ["Server Error"]
@@ -36,7 +37,16 @@ defmodule TD.Boundary.CommandProcessorTest do
 
     test "it should collect the tasks" do
       result =
-        Command.parse(["add", "yo dawg"])
+        CommandParser.parse(["--add", "yo dawg"])
+        |> CommandProcessor.process()
+
+      assert result.tasks == [Task.new(title: "yo dawg")]
+      assert result.status == :ok
+    end
+
+    test "should alias add" do
+      result =
+        CommandParser.parse(["-a", "yo dawg"])
         |> CommandProcessor.process()
 
       assert result.tasks == [Task.new(title: "yo dawg")]
@@ -44,7 +54,7 @@ defmodule TD.Boundary.CommandProcessorTest do
     end
   end
 
-  describe "done" do
+  describe "complete" do
     setup do
       stub_complete_task(result: [Task.new(title: 'some flerpn'), Task.new(title: 'some derpn')])
 
@@ -53,7 +63,20 @@ defmodule TD.Boundary.CommandProcessorTest do
 
     test "it should find and update the correct task" do
       result =
-        Command.parse(["done", "some flerpn"])
+        CommandParser.parse(["--complete", "some flerpn"])
+        |> CommandProcessor.process()
+
+      assert result.body == "some flerpn"
+
+      assert result.tasks == [
+               Task.new(title: 'some flerpn'),
+               Task.new(title: 'some derpn')
+             ]
+    end
+
+    test "it should alias correct" do
+      result =
+        CommandParser.parse(["-c", "some flerpn"])
         |> CommandProcessor.process()
 
       assert result.body == "some flerpn"
@@ -69,7 +92,7 @@ defmodule TD.Boundary.CommandProcessorTest do
     setup :stub_all
 
     test "it should collect the tasks" do
-      result = Command.parse([]) |> CommandProcessor.process()
+      result = CommandParser.parse([]) |> CommandProcessor.process()
 
       assert result.tasks == [
                Task.new(id: 1, title: "you"),
@@ -84,7 +107,7 @@ defmodule TD.Boundary.CommandProcessorTest do
     setup :stub_error
 
     test "it should collect the response to strings" do
-      result = Command.parse([]) |> CommandProcessor.process()
+      result = CommandParser.parse([]) |> CommandProcessor.process()
 
       assert result.response == ["Server Error"]
       assert result.status == :error

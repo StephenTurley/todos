@@ -1,7 +1,5 @@
 defmodule TD.Core.Command do
   defstruct [:type, :body, :tasks, :response, :status]
-  alias TD.Core.CommandParser
-  defdelegate parse(args), to: CommandParser
 
   def new(fields) do
     default = [body: %{}, tasks: [], response: [], status: :ok]

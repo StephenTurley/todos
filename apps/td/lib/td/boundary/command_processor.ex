@@ -17,7 +17,7 @@ defmodule TD.Boundary.CommandProcessor do
     |> handle_response(cmd)
   end
 
-  def process(%{type: :done} = cmd) do
+  def process(%{type: :complete} = cmd) do
     API.complete_task(cmd.body)
     |> handle_response(cmd)
   end

@@ -3,7 +3,15 @@ defmodule TD.Core.CommandParser do
   alias Core.Task
   alias Core.Boundary.TaskValidator
 
-  def parse(["add", title]) do
+  def parse(args) do
+    OptionParser.parse(args,
+      aliases: [c: :complete, a: :add],
+      strict: [add: :string, complete: :string]
+    )
+    |> create()
+  end
+
+  defp create({[add: title], [], []}) do
     with task <- Task.new(title: title),
          :ok <- TaskValidator.errors(task) do
       Command.new(type: :add, body: task)
@@ -13,15 +21,22 @@ defmodule TD.Core.CommandParser do
     end
   end
 
-  def parse(["done", title]) do
-    Command.new(type: :done, body: title)
+  defp create({[complete: title], [], []}) do
+    Command.new(type: :complete, body: title)
   end
 
-  def parse([]) do
+  defp create({[], [], []}) do
     Command.new(type: :all)
   end
 
-  def parse(_) do
-    Command.new(type: :invalid, response: ["invalid command"], status: :error)
+  defp create(_) do
+    response = [
+      "td [options] [args]",
+      "td, Prints todo list",
+      "-a, --add <title>, Add a task",
+      "-c, --complete <title>, Complete a task"
+    ]
+
+    Command.new(type: :invalid, response: response, status: :error)
   end
 end
