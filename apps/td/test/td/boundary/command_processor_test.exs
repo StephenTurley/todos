@@ -46,10 +46,7 @@ defmodule TD.Boundary.CommandProcessorTest do
 
   describe "done" do
     setup do
-      stub_complete_task(
-        title: 'some flerpn',
-        result: [Task.new(title: 'some flerpn'), Task.new(title: 'some derpn')]
-      )
+      stub_complete_task(result: [Task.new(title: 'some flerpn'), Task.new(title: 'some derpn')])
 
       :ok
     end
@@ -95,14 +92,10 @@ defmodule TD.Boundary.CommandProcessorTest do
   end
 
   # not a setup function.. kind of awkward
-  defp stub_complete_task(title: title, result: body) do
-    payload = %{
-      method: :post,
-      query: [{:title, title}],
-      url: "http://localhost:4001/task/complete"
-    }
+  defp stub_complete_task(result: body) do
+    url = "http://localhost:4001/task/complete?title=some+flerpn"
 
-    mock(fn payload ->
+    mock(fn %{method: :post, url: ^url} ->
       json(Jason.encode!(body), status: 200)
     end)
   end

@@ -1,33 +1,11 @@
 defmodule TD.Core.Command do
   defstruct [:type, :body, :tasks, :response, :status]
-  alias Core.Task
-  alias Core.Boundary.TaskValidator
+  alias TD.Core.CommandParser
+  defdelegate parse(args), to: CommandParser
 
   def new(fields) do
     default = [body: %{}, tasks: [], response: [], status: :ok]
     struct!(__MODULE__, Keyword.merge(default, fields))
-  end
-
-  def parse(["add", title]) do
-    with task <- Task.new(title: title),
-         :ok <- TaskValidator.errors(task) do
-      new(type: :add, body: task)
-    else
-      errors ->
-        new(type: :add, response: errors, status: :error)
-    end
-  end
-
-  def parse(["done", title]) do
-    new(type: :done, body: title)
-  end
-
-  def parse([]) do
-    new(type: :all)
-  end
-
-  def parse(_) do
-    new(type: :invalid, response: ["invalid command"], status: :error)
   end
 
   def add_response(cmd, response) do
