@@ -2,13 +2,12 @@ defmodule RouterTest do
   use Server.RepoCase, async: false
   use Plug.Test
 
-  alias Server.Boundary.TaskManager
   alias Server.Boundary.TaskPersistence
 
   @opts Router.init([])
 
   setup do
-    TaskManager.clear(&TaskPersistence.clear/0)
+    TaskPersistence.clear()
   end
 
   describe "getting tasks" do

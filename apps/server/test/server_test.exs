@@ -1,10 +1,9 @@
 defmodule ServerTest do
   use Server.RepoCase, async: false
-  alias Server.Boundary.TaskManager
   alias Server.Boundary.TaskPersistence
 
   setup do
-    TaskManager.clear(&TaskPersistence.clear/0)
+    TaskPersistence.clear()
   end
 
   test "you can add a task" do
