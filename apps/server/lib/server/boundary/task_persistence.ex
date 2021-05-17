@@ -14,6 +14,7 @@ defmodule Server.Boundary.TaskPersistence do
   def all() do
     from(
       t in TaskSchema,
+      order_by: t.inserted_at,
       select: %{id: t.id, title: t.title, is_complete: t.is_complete}
     )
     |> TaskRepo.all()
