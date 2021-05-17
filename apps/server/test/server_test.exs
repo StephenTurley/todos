@@ -1,9 +1,18 @@
 defmodule ServerTest do
   use Server.RepoCase, async: false
-  alias Server.Boundary.TaskPersistence
+  alias Server.Boundary.TaskPersistence, as: DB
+  alias Core.Task
 
   setup do
-    TaskPersistence.clear()
+    DB.clear()
+  end
+
+  test "you can get all tasks" do
+    DB.add(Task.new(title: "Flerpn"))
+    DB.add(Task.new(title: "Derpn"))
+
+    titles = Enum.map(Server.all(), & &1.title)
+    assert titles == ["Flerpn", "Derpn"]
   end
 
   test "you can add a task" do
